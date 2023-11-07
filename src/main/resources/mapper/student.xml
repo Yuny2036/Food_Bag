@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dr.foody.student.dao.StudentDao">
+
+    <select id="getList" parameterType="dr.foody.student.dto.StudentDto"
+            resultType="dr.foody.student.dto.StudentDto">
+        SELECT
+        idx,
+        name,
+        age
+        FROM student
+        <where>
+            <if test="idx !=null">AND idx = #{idx}</if>
+            <if test="name !=null">AND name = #{name}</if>
+            <if test="age !=null">AND age = #{age}</if>
+        </where>
+    </select>
+    <update id="mod" parameterType="dr.foody.student.dto.StudentDto">
+        UPDATE student
+        <set>
+            <if test="name !=null">, name = #{name}</if>
+            <if test="age !=null">, age = #{age}</if>
+        </set>
+        WHERE IDX = #{idx}
+    </update>
+    <insert id="reg" parameterType="dr.foody.student.dto.StudentDto"
+            useGeneratedKeys="true" keyProperty="idx">
+        INSERT student
+        (
+        name,
+        age
+        ) VALUES (
+        #{name},
+        #{age}
+        )
+    </insert>
+    <delete id="del" parameterType="java.lang.Integer">
+        DELETE FROM student WHERE IDX = #{idx}
+    </delete>
+</mapper>
