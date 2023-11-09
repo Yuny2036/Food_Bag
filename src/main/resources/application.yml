@@ -8,7 +8,7 @@ spring:
 
   datasource:
 
-    url: jdbc:log4jdbc:mariadb://svc.sel5.cloudtype.app:31389/doctor
+    url: jdbc:log4jdbc:mariadb://svc.sel5.cloudtype.app:32176/mealsir
     driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
     username: root
-    password: k841101!@#
+    password: 1541
