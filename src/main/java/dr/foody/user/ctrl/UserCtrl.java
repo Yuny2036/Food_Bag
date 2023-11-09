@@ -1,6 +1,5 @@
 package dr.foody.user.ctrl;
 
-import dr.foody.student.dto.StudentDto;
 import dr.foody.user.dto.UserDto;
 import dr.foody.user.svc.UserSvc;
 import org.springframework.beans.factory.annotation.Autowired;
