@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="dr.foody.list_illness.dao.List_illnessDao">
+<mapper namespace="dr.foody.listillness.dao.ListillnessDao">
 
-    <select id="getList" parameterType="dr.foody.list_illness.dto.List_illnessDto"
-            resultType="dr.foody.list_illness.dto.List_illnessDto">
+    <select id="getList" parameterType="dr.foody.listillness.dto.ListillnessDto"
+            resultType="dr.foody.listillness.dto.ListillnessDto">
         SELECT
         idx,
         code,
@@ -15,7 +15,7 @@
             <if test="name !=null">AND name = #{name}</if>
         </where>
     </select>
-    <update id="mod" parameterType="dr.foody.list_illness.dto.List_illnessDto">
+    <update id="mod" parameterType="dr.foody.listillness.dto.ListillnessDto">
         UPDATE list_illness
         <set>
             <if test="code !=null"> code = #{code}</if>
@@ -23,7 +23,7 @@
         </set>
         WHERE IDX = #{idx}
     </update>
-    <insert id="reg" parameterType="dr.foody.list_illness.dto.List_illnessDto"
+    <insert id="reg" parameterType="dr.foody.listillness.dto.ListillnessDto"
             useGeneratedKeys="true" keyProperty="idx">
         INSERT list_illness
         (
