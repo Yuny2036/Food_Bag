@@ -6,19 +6,19 @@
             resultType="dr.foody.userDisease.dto.UserDiseaseDto">
         SELECT
         idx,
-        user_idx,
+        userIdx,
         code
         FROM user_disease
         <where>
             <if test="idx !=null">idx = #{idx}</if>
-            <if test="user_idx !=null">AND user_idx = #{user_idx}</if>
+            <if test="userIdx !=null">AND userIdx = #{userIdx}</if>
             <if test="code !=null">AND code = #{code}</if>
         </where>
     </select>
     <update id="mod" parameterType="dr.foody.userDisease.dto.UserDiseaseDto">
         UPDATE user_disease
         <set>
-            <if test="user_idx !=null"> user_idx = #{user_idx}</if>
+            <if test="userIdx !=null"> userIdx = #{userIdx}</if>
             <if test="code !=null">, code = #{code}</if>
         </set>
         WHERE IDX = #{idx}
@@ -27,10 +27,10 @@
             useGeneratedKeys="true" keyProperty="idx">
         INSERT user_disease
         (
-        user_idx,
+        userIdx,
         code
         ) VALUES (
-        #{user_idx},
+        #{userIdx},
         #{code}
         )
     </insert>
