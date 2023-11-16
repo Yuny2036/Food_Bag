@@ -14,9 +14,9 @@ public class CorsConfig {
     public CorsFilter corsFilter() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
-        config.addAllowedOrigin("*"); // 모든 origin 허용, 실제 운영 환경에서는 필요에 따라 수정
-        config.addAllowedMethod("*");
-        config.addAllowedHeader("*");
+        config.addAllowedOrigin("127.0.0.1"); // 모든 origin 허용, 실제 운영 환경에서는 필요에 따라 수정
+        config.addAllowedMethod("127.0.0.1");
+        config.addAllowedHeader("127.0.0.1");
         source.registerCorsConfiguration("/**", config);
         return new CorsFilter(source);
     }
