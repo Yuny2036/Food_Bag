@@ -13,7 +13,7 @@
 
     <logger name="jdbc.audit" level="off" />
 
-    <logger name="jdbc.resultset" level="info" />
+    <logger name="jdbc.resultset" level="off" />
 
     <logger name="jdbc.resultsettable" level="debug" />
 
