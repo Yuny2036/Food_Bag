@@ -13,6 +13,7 @@ public class UserSvc {
     UserDao userDao;
 
     public Object getList(UserDto userDto){
+        System.out.println(userDao.getList(userDto));
         return userDao.getList(userDto);
     }
     public Object modify(UserDto userDto){
