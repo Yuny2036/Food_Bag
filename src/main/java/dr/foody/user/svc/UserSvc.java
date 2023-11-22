@@ -1,6 +1,7 @@
 package dr.foody.user.svc;
 
 import dr.foody.user.dao.UserDao;
+import dr.foody.user.dto.JoinDto;
 import dr.foody.user.dto.UserDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,6 +77,26 @@ public class UserSvc {
             return userList.get(0).getIdx();  // 검색된 row가 있다면 아이디 키값을 리턴
 
 
+    }
+
+//    public Object regist(UserDto userDto){
+//        return userDao.reg(userDto);
+//    }
+
+    public Integer join(JoinDto joinDto){
+
+//        email 중복
+        if (isChkId(joinDto.getEmail())){
+            return -1;
+        } else {
+            allowJoin(joinDto);
+            return 1;
+        }
+
+    }
+
+    private Object allowJoin(JoinDto joinDto){
+        return userDao.join(joinDto);
     }
 
 }

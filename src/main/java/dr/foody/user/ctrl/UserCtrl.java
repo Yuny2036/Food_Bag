@@ -1,6 +1,7 @@
 package dr.foody.user.ctrl;
 
 import dr.foody.user.dto.UserDto;
+import dr.foody.user.dto.JoinDto;
 import dr.foody.user.svc.UserSvc;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,4 +54,21 @@ public class UserCtrl {
         //          user_idx : 로그인된 user의 키값. 로그인이 실패라면 쓰레기 값이 input되어있음.
 
     }
+
+    @PostMapping("/join")
+    public Object join( @ModelAttribute JoinDto joinDto){
+        Integer svcResponse = userService.join(joinDto);
+        String rst_cd;
+
+        if (svcResponse > 0){
+            rst_cd = svcResponse.toString();
+        } else {
+            rst_cd = "200";
+        }
+
+        JSONObject obj = new JSONObject();
+        obj.put("rst_cd", rst_cd);
+        return obj.toString();
+    }
+
 }

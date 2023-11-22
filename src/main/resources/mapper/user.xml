@@ -49,6 +49,40 @@
         #{pwda}
         )
     </insert>
+    <insert id="join" parameterType="dr.foody.user.dto.JoinDto"
+            useGeneratedKeys="true" keyProperty="idx">
+<!--        회원 테이블 -->
+        INSERT INTO user
+        (
+        email,
+        nickname,
+        pwd,
+        pwdq,
+        pwda
+        ) VALUES (
+        #{email},
+        #{nickname},
+        #{pwd},
+        #{pwdq},
+        #{pwda}
+        );
+<!--        회원 만성질환 테이블 -->
+        INSERT INTO user_disease
+        (user_idx,
+        code
+        ) VALUES (
+        #{idx},
+        #{codeDise}
+        );
+<!--        회원 알레르기 테이블 -->
+        INSERT INTO user_allergie
+        (user_idx,
+        code
+        ) VALUES (
+        #{idx},
+        #{codeAlle}
+        );
+    </insert>
     <delete id="del" parameterType="java.lang.Integer">
         DELETE FROM user WHERE IDX = #{idx}
     </delete>
