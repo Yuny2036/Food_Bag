@@ -60,10 +60,10 @@ public class UserCtrl {
         Integer svcResponse = userService.join(joinDto);
         String rst_cd;
 
-        if (svcResponse > 0){
+        if (svcResponse < 0){
             rst_cd = svcResponse.toString();
         } else {
-            rst_cd = "200";
+            rst_cd = "200";   // 200 success
         }
 
         JSONObject obj = new JSONObject();

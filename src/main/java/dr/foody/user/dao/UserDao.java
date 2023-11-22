@@ -9,7 +9,7 @@ import java.util.List;
 @Mapper
 public interface UserDao {
     List<UserDto> getList(UserDto userDto);
-    List<JoinDto> join(JoinDto joinDto);
+    Integer join(JoinDto joinDto);
     Integer mod(UserDto userDto);
     Integer reg(UserDto userDto);
     Integer del(Integer idx);

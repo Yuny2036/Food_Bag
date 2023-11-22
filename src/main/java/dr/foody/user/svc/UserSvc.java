@@ -3,9 +3,14 @@ package dr.foody.user.svc;
 import dr.foody.user.dao.UserDao;
 import dr.foody.user.dto.JoinDto;
 import dr.foody.user.dto.UserDto;
+import dr.foody.userAllergie.dao.UserAllergieDao;
+import dr.foody.userAllergie.dto.UserAllergieDto;
+import dr.foody.userDisease.dao.UserDiseaseDao;
+import dr.foody.userDisease.dto.UserDiseaseDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -14,6 +19,12 @@ import java.util.List;
 public class UserSvc {
     @Autowired
     UserDao userDao;
+
+    @Autowired
+    UserDiseaseDao userDiseaseDao;
+
+    @Autowired
+    UserAllergieDao userAllergieDao;
 
     public Object getList(UserDto userDto){
         return userDao.getList(userDto);
@@ -30,6 +41,7 @@ public class UserSvc {
     }
 
     // login
+
     public Integer login(UserDto userDto){
 
         // return 값은 임의로 정의하였으며, 추후 return 값을 규정하여 진행하는것을 추천함
@@ -89,14 +101,42 @@ public class UserSvc {
         if (isChkId(joinDto.getEmail())){
             return -1;
         } else {
-            allowJoin(joinDto);
-            return 1;
+            if(allowJoin(joinDto))
+                return 1;
+            else
+                return -1;
         }
 
     }
 
-    private Object allowJoin(JoinDto joinDto){
-        return userDao.join(joinDto);
+
+    private Boolean allowJoin(JoinDto joinDto){
+
+        // user table input
+        UserDto userDto = new UserDto();
+        userDto.setEmail(joinDto.getEmail());
+        userDto.setNickname(joinDto.getNickname());
+        userDto.setPwd(joinDto.getPwd());
+        userDto.setPwdq(joinDto.getPwdq());
+        userDto.setPwda(joinDto.getPwda());
+        if(userDao.join(joinDto) < 1)
+            return false;
+
+        // userDisease Table input
+        UserDiseaseDto userDiseaseDto = new UserDiseaseDto();
+        userDiseaseDto.setUserIdx(joinDto.getIdx());
+        userDiseaseDto.setCode(joinDto.getCodeDise());
+        if( userDiseaseDao.reg(userDiseaseDto) < 1)
+            return false;
+
+        //userAllergie table input
+        UserAllergieDto userAllergieDto = new UserAllergieDto();
+        userAllergieDto.setUserIdx(joinDto.getIdx());
+        userAllergieDto.setCode(joinDto.getCodeAlle());
+        if(userAllergieDao.reg(userAllergieDto) < 1)
+            return false;
+
+        return true;
     }
 
 }
