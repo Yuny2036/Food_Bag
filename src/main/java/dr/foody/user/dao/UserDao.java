@@ -7,7 +7,7 @@ import java.util.List;
 
 @Mapper
 public interface UserDao {
-    List<UserDao> getList(UserDto userDto);
+    List<UserDto> getList(UserDto userDto);
     Integer mod(UserDto userDto);
     Integer reg(UserDto userDto);
     Integer del(Integer idx);
