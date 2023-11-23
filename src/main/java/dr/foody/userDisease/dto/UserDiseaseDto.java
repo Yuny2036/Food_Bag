@@ -7,4 +7,5 @@ public class UserDiseaseDto {
     private Integer idx;
     private Integer userIdx;
     private String code;
+    private String name;
 }

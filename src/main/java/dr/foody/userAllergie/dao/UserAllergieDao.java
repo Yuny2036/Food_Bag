@@ -7,7 +7,7 @@ import java.util.List;
 
 @Mapper
 public interface UserAllergieDao {
-    List<UserAllergieDao> getList(UserAllergieDto userAllergieDto);
+    List<UserAllergieDto> getList(UserAllergieDto userAllergieDto);
     Integer mod(UserAllergieDto userAllergieDto);
     Integer reg(UserAllergieDto userAllergieDto);
     Integer del(Integer idx);

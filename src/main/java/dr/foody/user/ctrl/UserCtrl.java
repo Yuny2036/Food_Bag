@@ -7,6 +7,8 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+
 @RestController
 @RequestMapping("/user")
 public class UserCtrl {
@@ -35,16 +37,16 @@ public class UserCtrl {
 
     @GetMapping("/login")
     public Object login( @ModelAttribute UserDto userDto) {
-        Integer userIdx = userService.login(userDto);
-        String rst_cd ;
-        if( userIdx > 0)
-            rst_cd = "200";
-        else
-            rst_cd = userIdx.toString();
+        HashMap<String, String> userInfoMap = userService.login(userDto);
+        String rst_cd = userInfoMap.get("rst_cd");
 
         JSONObject obj = new JSONObject();
+
         obj.put("rst_cd", rst_cd);
-        obj.put("user_idx", userIdx);
+        obj.put("user_idx", userInfoMap.get("userIdx"));
+        obj.put("nickNm", userInfoMap.get("nickNm"));
+        obj.put("allergieCd", userInfoMap.get("allergieCd"));
+        obj.put("allergieNm", userInfoMap.get("allergieNm"));
         return obj.toString();
 
         // API  : /user/login

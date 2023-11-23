@@ -16,7 +16,7 @@ public class CorsConfig {
         CorsConfiguration config = new CorsConfiguration();
         config.addAllowedOrigin("*"); // 모든 origin 허용, 실제 운영 환경에서는 필요에 따라 수정
         config.addAllowedMethod("*");
-        config.addAllowedHeader("localhost:8080");
+        config.addAllowedHeader("127.0.0.1");
         source.registerCorsConfiguration("/**", config);
         return new CorsFilter(source);
     }

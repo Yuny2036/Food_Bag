@@ -5,14 +5,16 @@
     <select id="getList" parameterType="dr.foody.userDisease.dto.UserDiseaseDto"
             resultType="dr.foody.userDisease.dto.UserDiseaseDto">
         SELECT
-        idx,
-        userIdx,
-        code
-        FROM user_disease
+        a.idx,
+        a.userIdx,
+        a.code,
+        b.name
+        FROM user_disease AS a LEFT OUTER JOIN list_disease AS b
+        ON a.code = b.code
         <where>
-            <if test="idx !=null">idx = #{idx}</if>
-            <if test="userIdx !=null">AND userIdx = #{userIdx}</if>
-            <if test="code !=null">AND code = #{code}</if>
+            <if test="idx !=null">a.idx = #{idx}</if>
+            <if test="userIdx !=null">AND a.userIdx = #{userIdx}</if>
+            <if test="code !=null">AND a.code = #{code}</if>
         </where>
     </select>
     <update id="mod" parameterType="dr.foody.userDisease.dto.UserDiseaseDto">

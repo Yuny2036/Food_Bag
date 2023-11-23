@@ -5,14 +5,16 @@
     <select id="getList" parameterType="dr.foody.userAllergie.dto.UserAllergieDto"
             resultType="dr.foody.userAllergie.dto.UserAllergieDto">
         SELECT
-        idx,
-        userIdx,
-        code
-        FROM user_allergie
+        a.idx,
+        a.userIdx,
+        a.code,
+        b.name
+        FROM user_allergie AS a LEFT OUTER JOIN lists_allergie as b
+        ON a.code = b.code
         <where>
-            <if test="idx !=null">idx = #{idx}</if>
-            <if test="userIdx !=null">AND userIdx = #{userIdx}</if>
-            <if test="code !=null">AND code = #{code}</if>
+            <if test="idx !=null">a.idx = #{idx}</if>
+            <if test="userIdx !=null">AND a.userIdx = #{userIdx}</if>
+            <if test="code !=null">AND a.code = #{code}</if>
         </where>
     </select>
     <update id="mod" parameterType="dr.foody.userAllergie.dto.UserAllergieDto">
