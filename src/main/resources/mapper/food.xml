@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dr.foody.food.dao.FoodDao">
+
+    <select id="getList" parameterType="dr.foody.food.dto.FoodDto"
+            resultType="dr.foody.food.dto.FoodDto">
+        SELECT
+        idx,
+        name,
+        weight,
+        season
+        FROM food
+        <where>
+            <if test="idx !=null">idx = #{idx}</if>
+            <if test="name !=null">AND name = #{name}</if>
+            <if test="weight !=null">AND weight = #{weight}</if>
+            <if test="season !=null">AND season = #{season}</if>
+        </where>
+    </select>
+    <update id="mod" parameterType="dr.foody.food.dto.FoodDto">
+        UPDATE food
+        <set>
+            <if test="name !=null"> name = #{name}</if>
+            <if test="weight !=null">, weight = #{weight}</if>
+            <if test="season !=null">, season = #{season}</if>
+        </set>
+        WHERE IDX = #{idx}
+    </update>
+    <insert id="reg" parameterType="dr.foody.food.dto.FoodDto"
+            useGeneratedKeys="true" keyProperty="idx">
+        INSERT INTO food
+        (
+        name,
+        weight,
+        season
+        ) VALUES (
+        #{name},
+        #{weight},
+        #{season}
+        )
+    </insert>
+    <delete id="del" parameterType="java.lang.Integer">
+        DELETE FROM food WHERE IDX = #{idx}
+    </delete>
+</mapper>
