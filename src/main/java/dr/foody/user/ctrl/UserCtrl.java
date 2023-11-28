@@ -47,6 +47,8 @@ public class UserCtrl {
         obj.put("nickNm", userInfoMap.get("nickNm"));
         obj.put("allergieCd", userInfoMap.get("allergieCd"));
         obj.put("allergieNm", userInfoMap.get("allergieNm"));
+        obj.put("diseaseCd", userInfoMap.get("diseaseCd"));
+        obj.put("diseaseNm", userInfoMap.get("diseaseNm"));
         return obj.toString();
 
         // API  : /user/login

@@ -63,13 +63,15 @@ public class UserSvc {
         }
 
         HashMap<String, String> allergiInfoMap = getAllergieInfo(nowUser.getIdx());
-        //HashMap<String, String> diseaseInfoMap = getDiseaseeInfo(userIdx);
+        HashMap<String, String> diseaseInfoMap = getDiseaseInfo(nowUser.getIdx());
 
         resultMap.put("rst_cd", "200");
         resultMap.put("userIdx", nowUser.getIdx().toString());
         resultMap.put("nickNm", nowUser.getNickname());
         resultMap.put("allergieCd", allergiInfoMap.get("allergieCd"));
         resultMap.put("allergieNm", allergiInfoMap.get("allergieNm"));
+        resultMap.put("diseaseCd", diseaseInfoMap.get("diseaseCd"));
+        resultMap.put("diseaseNm", diseaseInfoMap.get("diseaseNm"));
         return resultMap;
     }
 
@@ -183,6 +185,30 @@ public class UserSvc {
         HashMap<String, String> resultMap = new HashMap<String, String>();
         resultMap.put("allergieCd", aCd.substring(1)) ;
         resultMap.put("allergieNm", aNm.substring(1)) ;
+
+        return resultMap;
+
+    }
+
+    private HashMap<String, String> getDiseaseInfo(Integer userIdx)
+    {
+        UserDiseaseDto aDto = new UserDiseaseDto();
+        aDto.setUserIdx(userIdx);
+        List<UserDiseaseDto> userDiseaseList = userDiseaseDao.getList(aDto);
+        StringBuilder aCd = new StringBuilder();
+        StringBuilder aNm = new StringBuilder();
+
+        for(UserDiseaseDto u : userDiseaseList)
+        {
+            aCd.append("#");
+            aCd.append(u.getCode());
+
+            aNm.append("#");
+            aNm.append(u.getName());
+        }
+        HashMap<String, String> resultMap = new HashMap<String, String>();
+        resultMap.put("diseaseCd", aCd.substring(1)) ;
+        resultMap.put("diseaseNm", aNm.substring(1)) ;
 
         return resultMap;
 

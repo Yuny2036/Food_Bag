@@ -25,4 +25,5 @@ public class FoodSvc {
     public Object delete(Integer idx){
         return foodDao.del(idx);
     }
+
 }
