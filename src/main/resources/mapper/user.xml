@@ -16,7 +16,7 @@
             <if test="idx !=null">idx = #{idx}</if>
             <if test="email !=null">AND email = #{email}</if>
             <if test="nickname !=null">AND nickname = #{nickname}</if>
-            <if test="pwd !=null">AND pwd = #{pwd}</if>
+            <if test="pwd !=null">AND pwd = password(#{pwd})</if>
             <if test="pwdq !=null">AND pwdq = #{pwdq}</if>
             <if test="pwda !=null">AND pwda = #{pwda}</if>
         </where>
@@ -26,7 +26,7 @@
         <set>
             <if test="email !=null"> email = #{email}</if>
             <if test="nickname !=null">, nickname = #{nickname}</if>
-            <if test="pwd !=null">, pwd = #{pwd}</if>
+            <if test="pwd !=null">, pwd = password(#{pwd})</if>
             <if test="pwdq !=null">, pwdq = #{pwdq}</if>
             <if test="pwda !=null">, pwda = #{pwda}</if>
         </set>
@@ -44,7 +44,7 @@
         ) VALUES (
         #{email},
         #{nickname},
-        #{pwd},
+        password(#{pwd}),
         #{pwdq},
         #{pwda}
         )
@@ -62,7 +62,7 @@
         ) VALUES (
         #{email},
         #{nickname},
-        #{pwd},
+        password(#{pwd}),
         #{pwdq},
         #{pwda}
         );

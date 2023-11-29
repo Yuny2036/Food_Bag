@@ -2,6 +2,7 @@ package dr.foody.user.svc;
 
 import dr.foody.user.dao.UserDao;
 import dr.foody.user.dto.JoinDto;
+import dr.foody.user.dto.PwdChangeDto;
 import dr.foody.user.dto.UserDto;
 import dr.foody.userAllergie.dao.UserAllergieDao;
 import dr.foody.userAllergie.dto.UserAllergieDto;
@@ -107,11 +108,29 @@ public class UserSvc {
 
 
     }
+    /*
+    비밀번호 찾기 질문 & 답변 대조 함수
 
-//    public Object regist(UserDto userDto){
-//        return userDao.reg(userDto);
-//    }
+    대조를 위해 받아야 할 값을 계정 index로 할 지 email을 앱 사용자가 직접 입력하게 해야 할 지 아직 못 정했다.
+    아래 함수는 index와 pwda를 받아서 검증하게 만들었음.
+     */
+    private Boolean isPwdaCorrect(Integer idx, String pwda){
+        UserDto userDto = new UserDto();
 
+        userDto.setIdx(idx);
+        userDto.setPwda(pwda);
+
+        List<UserDto> userList = userDao.getList(userDto);
+
+        if(userList.size() != 1){
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+
+//    회원가입 시도
     public Integer join(JoinDto joinDto){
 
 //        email 중복
@@ -127,6 +146,7 @@ public class UserSvc {
     }
 
 
+//    실제 회원가입 + 데이터 등록
     private Boolean allowJoin(JoinDto joinDto){
 
         // user table input
@@ -140,11 +160,19 @@ public class UserSvc {
             return false;
 
         // userDisease Table input
+        String disease = joinDto.getCodeDise();
+        String[] arrDisease = disease.split("#");
+
         UserDiseaseDto userDiseaseDto = new UserDiseaseDto();
         userDiseaseDto.setUserIdx(joinDto.getIdx());
-        userDiseaseDto.setCode(joinDto.getCodeDise());
-        if( userDiseaseDao.reg(userDiseaseDto) < 1)
-            return false;
+
+        for (String disea : arrDisease)
+        {
+            userDiseaseDto.setCode(disea);
+            if( userDiseaseDao.reg(userDiseaseDto) < 1)
+                return false;
+        }
+
 
         //userAllergie table input
         String allergie = joinDto.getCodeAlle();  // A#B#C
@@ -166,6 +194,7 @@ public class UserSvc {
     }
 
 
+//    회원 알러지 정보 가져오기
     private HashMap<String, String> getAllergieInfo(Integer userIdx)
     {
         UserAllergieDto aDto = new UserAllergieDto();
@@ -190,6 +219,7 @@ public class UserSvc {
 
     }
 
+//    회원 만성질환 정보 가져오기
     private HashMap<String, String> getDiseaseInfo(Integer userIdx)
     {
         UserDiseaseDto aDto = new UserDiseaseDto();
@@ -215,5 +245,53 @@ public class UserSvc {
     }
 
 
+//    회원탈퇴
+    public HashMap<String, String> resign(Integer idx){
+        HashMap<String, String> resultMap = new HashMap<>();
+        UserAllergieDto theUserAlle = new UserAllergieDto();
+        UserDiseaseDto theUserDise = new UserDiseaseDto();
 
+        theUserAlle.setUserIdx(idx);
+        theUserDise.setUserIdx(idx);
+
+        List<UserAllergieDto> alleList = userAllergieDao.getList(theUserAlle);
+        List<UserDiseaseDto> diseList = userDiseaseDao.getList(theUserDise);
+
+        for (UserAllergieDto a : alleList){
+            Integer i = a.getIdx();
+            userAllergieDao.del(i);
+        }
+        for (UserDiseaseDto b : diseList){
+            Integer i = b.getIdx();
+            userDiseaseDao.del(i);
+        }
+
+//        계정정보만 지울거라면 이 위의 코드를 주석
+
+        resultMap.put("rst_cd", "200");
+        userDao.del(idx);
+
+        return resultMap;
+    }
+
+    public HashMap<String, String> pwdChange(PwdChangeDto pwdChangeDto){
+        HashMap<String, String> resultMap = new HashMap<>();
+
+//        pwda 대조
+        if(!isPwdaCorrect(pwdChangeDto.getIdx(), pwdChangeDto.getPwda())){
+            resultMap.put("rst_cd", "-2");
+            resultMap.put("rst_desc", "비밀번호 질문에 대한 답변이 일치하지 않습니다.");
+            return resultMap;
+        }
+
+        UserDto userDto = new UserDto();
+        userDto.setIdx(pwdChangeDto.getIdx());
+        userDto.setPwd(pwdChangeDto.getNewPwd());
+
+        userDao.mod(userDto);
+        resultMap.put("rst_cd", "200");
+        resultMap.put("rst_desc", "성공적으로 비밀번호를 변경했습니다.");
+        return resultMap;
+
+    }
 }

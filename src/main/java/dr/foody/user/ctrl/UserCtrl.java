@@ -2,6 +2,7 @@ package dr.foody.user.ctrl;
 
 import dr.foody.user.dto.UserDto;
 import dr.foody.user.dto.JoinDto;
+import dr.foody.user.dto.PwdChangeDto;
 import dr.foody.user.svc.UserSvc;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,6 +73,42 @@ public class UserCtrl {
 
         JSONObject obj = new JSONObject();
         obj.put("rst_cd", rst_cd);
+        return obj.toString();
+
+        /*
+        API : /user/join
+        호출방식 : POST
+        Input : email, pwd, nickname, pwdq, pwda, codeAlle, codeDise (모두 String)
+        Output : "rst_cd" > 200: 성공, -1: 같은 이메일을 가진 계정 있음
+         */
+    }
+
+    @DeleteMapping("/resign")
+    public Object resign(@RequestParam(value = "idx", required = true) Integer idx){
+        HashMap<String, String> resignResponse = userService.resign(idx);
+        String rst_cd = resignResponse.get("rst_cd");
+
+        JSONObject obj = new JSONObject();
+        obj.put("rst_cd", rst_cd);
+
+        return obj.toString();
+
+        /*
+        API : /user/resign
+        호출방식 : DELETE
+        Input : idx (Integer, 유저user 테이블의 idx)
+        Output : "rst_cd" > 200: 성공
+         */
+    }
+
+    @PutMapping("/pwdchange")
+    public Object pwdChange(@ModelAttribute PwdChangeDto pwdChangeDto){
+        HashMap<String, String> pwdCResponse = userService.pwdChange(pwdChangeDto);
+
+        JSONObject obj = new JSONObject();
+        obj.put("rst_cd", pwdCResponse.get("rst_cd"));
+        obj.put("rst_desc", pwdCResponse.get("rst_desc"));
+
         return obj.toString();
     }
 
