@@ -6,6 +6,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+
 @Slf4j
 @Service
 public class FoodSvc {
@@ -26,4 +28,8 @@ public class FoodSvc {
         return foodDao.del(idx);
     }
 
+    public void showNutritionStats(Integer idx){
+        HashMap<String, String> nutrition = new HashMap<>();
+
+    }
 }

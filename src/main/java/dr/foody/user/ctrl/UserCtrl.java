@@ -4,6 +4,8 @@ import dr.foody.user.dto.UserDto;
 import dr.foody.user.dto.JoinDto;
 import dr.foody.user.dto.PwdChangeDto;
 import dr.foody.user.svc.UserSvc;
+import dr.foody.userAllergie.dto.UserAllergieDto;
+import dr.foody.userDisease.dto.UserDiseaseDto;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -103,13 +105,88 @@ public class UserCtrl {
 
     @PutMapping("/pwdchange")
     public Object pwdChange(@ModelAttribute PwdChangeDto pwdChangeDto){
-        HashMap<String, String> pwdCResponse = userService.pwdChange(pwdChangeDto);
+        HashMap<String, String> response = userService.pwdChange(pwdChangeDto);
 
         JSONObject obj = new JSONObject();
-        obj.put("rst_cd", pwdCResponse.get("rst_cd"));
-        obj.put("rst_desc", pwdCResponse.get("rst_desc"));
+        obj.put("rst_cd", response.get("rst_cd"));
+        obj.put("rst_desc", response.get("rst_desc"));
 
         return obj.toString();
+
+        /*
+        API : /user/pwdchange
+        호출방식 : PUT
+        Input : idx (Integer, user 테이블의 idx),
+                pwda (String, 비밀번호 질답의 답변),
+                newPwd (String, 새로 쓸 비밀번호),
+                newPwdc(String, 새로 쓸 비밀번호 확인)
+        Output : "rst_cd" > 200: 성공
+                 "rst_desc" > 'rst_cd' 설명 문구, 활용은 자율적으로 선택
+         */
+    }
+
+    @PostMapping("/allergiechange")
+    public Object allergieChange(@ModelAttribute UserAllergieDto userAllergieDto){
+        HashMap<String, String> response = userService.allergieChange(userAllergieDto);
+
+        JSONObject obj = new JSONObject();
+        obj.put("rst_cd", response.get("rst_cd"));
+        obj.put("deleted_records", response.get("deleted"));
+        obj.put("added_records", response.get("added"));
+
+        return obj.toString();
+
+        /*
+        API : /user/allergiechange
+        호출방식 : POST
+        Input : userIdx (Integer, user 테이블의 idx),
+                code (String, user_allergie 테이블의 code, A#B#C 형태의 알레르기 코드)
+        Output : "rst_cd" > 200: 성공
+                 "deleted_records" > 지워진 레코드 갯수 (기존 알레르기)
+                 "added_records" > 추가된 레코드 갯수 (새 알레르기)
+         */
+    }
+
+    @PostMapping("/diseasechange")
+    public Object diseaseChange(@ModelAttribute UserDiseaseDto userDiseaseDto){
+        HashMap<String, String> response = userService.diseaseChange(userDiseaseDto);
+
+        JSONObject obj = new JSONObject();
+        obj.put("rst_cd", response.get("rst_cd"));
+        obj.put("deleted_records", response.get("deleted"));
+        obj.put("added_records", response.get("added"));
+
+        return obj.toString();
+
+        /*
+        API : /user/diseasechange
+        호출방식 : POST
+        Input : userIdx (Integer, user 테이블의 idx),
+                code (String, user_disease 테이블의 code, A#B#C 형태의 만성질환 코드)
+        Output : "rst_cd" > 200: 성공
+                 "deleted_records" > 지워진 레코드 갯수 (기존 만성질환)
+                 "added_records" > 추가된 레코드 갯수 (새 만성질환)
+         */
+    }
+
+    @GetMapping("/showmedicalstats")
+    public Object showMedicalStats(@RequestParam(value = "idx", required = true) Integer idx){
+        HashMap<String, String> response = userService.showMedicalstats(idx);
+
+        JSONObject obj = new JSONObject();
+        obj.put("rst_cd", response.get("rst_cd"));
+        obj.put("allergie", response.get("allergie"));
+        obj.put("disease", response.get("disease"));
+
+        return obj.toString();
+        /*
+        API : /user/showmedicalstats
+        호출방식 : GET
+        Input : idx (Integer, user 테이블의 idx)
+        Output : "rst_cd" > 200: 성공
+                 "allergie" > A#B#C 의 형태로 전달 (유저 알레르기 정보)
+                 "disease" > A#B#C 의 형태로 전달 (유저 만성질환 정보)
+         */
     }
 
 }

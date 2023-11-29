@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
 @Slf4j
@@ -293,5 +294,111 @@ public class UserSvc {
         resultMap.put("rst_desc", "성공적으로 비밀번호를 변경했습니다.");
         return resultMap;
 
+    }
+
+//    알레르기 변경
+    public HashMap<String, String> allergieChange(UserAllergieDto userAllergieDto){
+        HashMap<String, String> resultMap = new HashMap<>();
+
+        Integer rst_delete = allergieDelete(userAllergieDto.getUserIdx());
+        Integer rst_add = allergieAdd(userAllergieDto.getUserIdx(), userAllergieDto.getCode());
+
+        resultMap.put("rst_cd", "200");
+        resultMap.put("deleted", rst_delete.toString());
+        resultMap.put("added", rst_add.toString());
+
+        return resultMap;
+    }
+
+//    회원번호와 일치하는 알레르기 레코드 전부 삭제
+    private Integer allergieDelete(Integer idx){
+        Integer deleteCount = 0;
+        UserAllergieDto userAllergieDto = new UserAllergieDto();
+        userAllergieDto.setUserIdx(idx);
+
+        List<UserAllergieDto> alleList = userAllergieDao.getList(userAllergieDto);
+        for (UserAllergieDto alle : alleList){
+            Integer i = alle.getIdx();
+            userAllergieDao.del(i);
+            deleteCount++;
+        }
+
+        return deleteCount;
+    }
+
+// 프론트에서 넘어온 A#B#C 형태의 알레르기 가공하여 DB에 레코드 추가
+    private Integer allergieAdd(Integer idx, String allergie){
+        Integer addCount = 0;
+        UserAllergieDto userAllergieDto = new UserAllergieDto();
+        String[] arrayAllergie = allergie.split("#");
+
+        for (String a : arrayAllergie){
+            userAllergieDto.setUserIdx(idx);
+            userAllergieDto.setCode(a);
+            userAllergieDao.reg(userAllergieDto);
+            addCount++;
+        }
+
+        return addCount;
+    }
+
+//    만성질환 변경
+    public HashMap<String, String> diseaseChange(UserDiseaseDto userDiseaseDto){
+        HashMap<String, String> resultMap = new HashMap<>();
+
+        Integer rst_delete = diseaseDelete(userDiseaseDto.getUserIdx());
+        Integer rst_add = diseaseAdd(userDiseaseDto.getUserIdx(), userDiseaseDto.getCode());
+
+        resultMap.put("rst_cd", "200");
+        resultMap.put("deleted", rst_delete.toString());
+        resultMap.put("added", rst_add.toString());
+
+        return resultMap;
+    }
+
+//    회원번호와 일치하는 만성질환 레코드 전부 삭제
+
+    private Integer diseaseDelete(Integer idx){
+        Integer deleteCount = 0;
+        UserDiseaseDto userDiseaseDto = new UserDiseaseDto();
+        userDiseaseDto.setUserIdx(idx);
+
+        List<UserDiseaseDto> diseList = userDiseaseDao.getList(userDiseaseDto);
+        for (UserDiseaseDto dise : diseList){
+            Integer i = dise.getIdx();
+            userDiseaseDao.del(i);
+            deleteCount++;
+        }
+
+        return deleteCount;
+    }
+
+// 프론트에서 넘어온 A#B#C 형태의 만성질환 가공하여 DB에 레코드 추가
+    private Integer diseaseAdd(Integer idx, String disease){
+        Integer addCount = 0;
+        UserDiseaseDto userDiseaseDto = new UserDiseaseDto();
+        String[] arrayDisease = disease.split("#");
+
+        for (String a : arrayDisease){
+            userDiseaseDto.setUserIdx(idx);
+            userDiseaseDto.setCode(a);
+            userDiseaseDao.reg(userDiseaseDto);
+            addCount++;
+        }
+
+        return addCount;
+    }
+
+//    알레르기 + 만성질환 return.. 만들기는 했지만, login 단계에서 정보 다 넘기는데 이게 필요한가?
+    public HashMap<String, String> showMedicalstats(Integer idx){
+        HashMap<String, String> totalInfo = new HashMap<>();
+        HashMap<String, String> alleInfo = getAllergieInfo(idx);
+        HashMap<String, String> diseInfo = getDiseaseInfo(idx);
+
+        totalInfo.put("allergie", alleInfo.get("allergieNm"));
+        totalInfo.put("disease", alleInfo.get("diseaseNm"));
+        totalInfo.put("rst_cd", "200");
+
+        return totalInfo;
     }
 }

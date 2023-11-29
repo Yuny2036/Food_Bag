@@ -2,6 +2,7 @@ package dr.foody.food.ctrl;
 
 import dr.foody.food.dto.FoodDto;
 import dr.foody.food.svc.FoodSvc;
+import dr.foody.food.dto.FoodNutritionDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,5 +31,10 @@ public class FoodCtrl {
     @PutMapping("/update")
     public Object modInsDev( @ModelAttribute FoodDto foodDto) {
         return foodService.modify(foodDto);
+    }
+
+    @GetMapping("/shownutritionstats")
+    public void showNutritionStats(@ModelAttribute FoodDto foodDto){
+//        FoodNutritionDto nutriDto =
     }
 }
