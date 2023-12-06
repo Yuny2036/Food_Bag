@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dr.foody.foodNutri.dao.FoodNutriDao">
+
+    <select id="getList" parameterType="dr.foody.foodNutri.dto.FoodNutriDto"
+            resultType="dr.foody.foodNutri.dto.FoodNutriDto">
+        SELECT
+        idx,
+        kcal,
+        carbo,
+        protein,
+        fat,
+        salt,
+        chole,
+        food_idx
+        FROM food_nutri
+        <where>
+            <if test="idx !=null">idx = #{idx}</if>
+            <if test="kcal !=null">AND kcal = #{kcal}</if>
+            <if test="carbo !=null">AND carbo = #{carbo}</if>
+            <if test="protein !=null">AND protein = #{protein}</if>
+            <if test="fat !=null">AND fat = #{fat}</if>
+            <if test="salt !=null">AND salt = #{salt}</if>
+            <if test="chole !=null">AND chole = #{chole}</if>
+            <if test="foodIdx !=null">AND food_idx = #{foodIdx}</if>
+        </where>
+    </select>
+    <update id="mod" parameterType="dr.foody.foodNutri.dto.FoodNutriDto">
+        UPDATE food_nutri
+        <set>
+            <if test="kcal !=null"> kcal = #{kcal}</if>
+            <if test="carbo !=null">, carbo = #{carbo}</if>
+            <if test="protein !=null">, protein = #{protein}</if>
+            <if test="fat !=null">, fat = #{fat}</if>
+            <if test="salt !=null">, salt = #{salt}</if>
+            <if test="chole !=null">, chole = #{chole}</if>
+            <if test="foodIdx !=null">, food_idx = #{foodIdx}</if>
+        </set>
+        WHERE IDX = #{idx}
+    </update>
+    <insert id="reg" parameterType="dr.foody.foodNutri.dto.FoodNutriDto"
+            useGeneratedKeys="true" keyProperty="idx">
+        INSERT INTO food_nutri
+        (
+        kcal,
+        carbo,
+        protein,
+        fat,
+        salt,
+        chole,
+        food_idx,
+        ) VALUES (
+        #{kcal},
+        #{carbo},
+        #{protein},
+        #{fat},
+        #{salt},
+        #{chole},
+        #{foodIdx},
+        )
+    </insert>
+    <delete id="del" parameterType="java.lang.Integer">
+        DELETE FROM food_nutri WHERE IDX = #{idx}
+    </delete>
+</mapper>

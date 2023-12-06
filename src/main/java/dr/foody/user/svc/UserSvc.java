@@ -45,8 +45,8 @@ public class UserSvc {
 
     // login
 
-    public HashMap<String, String> login(UserDto userDto){
-        HashMap<String, String> resultMap = new HashMap<String, String>();
+    public HashMap<String, Object> login(UserDto userDto){
+        HashMap<String, Object> resultMap = new HashMap<String, Object>();
         // return 값은 임의로 정의하였으며, 추후 return 값을 규정하여 진행하는것을 추천함
         // ex )  1 : 성공    1 이외의값은 실패이며 약속한 코드를 리턴함
         // ID 검사 하는 부분
@@ -64,7 +64,7 @@ public class UserSvc {
             return resultMap;
         }
 
-        HashMap<String, String> allergiInfoMap = getAllergieInfo(nowUser.getIdx());
+        HashMap<String, Object> allergiInfoMap = getAllergieInfo(nowUser.getIdx());
         HashMap<String, String> diseaseInfoMap = getDiseaseInfo(nowUser.getIdx());
 
         resultMap.put("rst_cd", "200");
@@ -72,6 +72,7 @@ public class UserSvc {
         resultMap.put("nickNm", nowUser.getNickname());
         resultMap.put("allergieCd", allergiInfoMap.get("allergieCd"));
         resultMap.put("allergieNm", allergiInfoMap.get("allergieNm"));
+        resultMap.put("allergieList", allergiInfoMap.get("allergieList"));
         resultMap.put("diseaseCd", diseaseInfoMap.get("diseaseCd"));
         resultMap.put("diseaseNm", diseaseInfoMap.get("diseaseNm"));
         return resultMap;
@@ -196,7 +197,7 @@ public class UserSvc {
 
 
 //    회원 알러지 정보 가져오기
-    private HashMap<String, String> getAllergieInfo(Integer userIdx)
+    private HashMap<String, Object> getAllergieInfo(Integer userIdx)
     {
         UserAllergieDto aDto = new UserAllergieDto();
         aDto.setUserIdx(userIdx);
@@ -212,10 +213,10 @@ public class UserSvc {
             aNm.append("#");
             aNm.append(u.getName());
         }
-        HashMap<String, String> resultMap = new HashMap<String, String>();
+        HashMap<String, Object> resultMap = new HashMap<String, Object>();
         resultMap.put("allergieCd", aCd.substring(1)) ;
         resultMap.put("allergieNm", aNm.substring(1)) ;
-
+        resultMap.put("allergieList", userAllergieList) ;
         return resultMap;
 
     }
@@ -392,11 +393,11 @@ public class UserSvc {
 //    알레르기 + 만성질환 return.. 만들기는 했지만, login 단계에서 정보 다 넘기는데 이게 필요한가?
     public HashMap<String, String> showMedicalstats(Integer idx){
         HashMap<String, String> totalInfo = new HashMap<>();
-        HashMap<String, String> alleInfo = getAllergieInfo(idx);
+        HashMap<String, Object> alleInfo = getAllergieInfo(idx);
         HashMap<String, String> diseInfo = getDiseaseInfo(idx);
 
-        totalInfo.put("allergie", alleInfo.get("allergieNm"));
-        totalInfo.put("disease", alleInfo.get("diseaseNm"));
+        totalInfo.put("allergie", (String)alleInfo.get("allergieNm"));
+        totalInfo.put("disease", diseInfo.get("diseaseNm"));
         totalInfo.put("rst_cd", "200");
 
         return totalInfo;

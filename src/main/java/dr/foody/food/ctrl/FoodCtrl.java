@@ -33,8 +33,10 @@ public class FoodCtrl {
         return foodService.modify(foodDto);
     }
 
+    /*
     @GetMapping("/shownutritionstats")
     public void showNutritionStats(@ModelAttribute FoodDto foodDto){
 //        FoodNutritionDto nutriDto =
     }
+    */
 }

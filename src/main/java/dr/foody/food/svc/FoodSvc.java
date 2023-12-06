@@ -2,11 +2,13 @@ package dr.foody.food.svc;
 
 import dr.foody.food.dao.FoodDao;
 import dr.foody.food.dto.FoodDto;
+import dr.foody.food.dto.FoodNutritionDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -28,8 +30,13 @@ public class FoodSvc {
         return foodDao.del(idx);
     }
 
+    /*
     public void showNutritionStats(Integer idx){
-        HashMap<String, String> nutrition = new HashMap<>();
-
+        HashMap<String, String> resultMap = new HashMap<>();
+        FoodNutritionDto nutrition = new FoodNutritionDto();
+        nutrition.setIdx(idx);
+//        List<FoodNutritionDto> nutriList = foodDao
     }
+
+    */
 }

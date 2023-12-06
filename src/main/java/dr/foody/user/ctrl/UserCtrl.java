@@ -40,8 +40,8 @@ public class UserCtrl {
 
     @GetMapping("/login")
     public Object login( @ModelAttribute UserDto userDto) {
-        HashMap<String, String> userInfoMap = userService.login(userDto);
-        String rst_cd = userInfoMap.get("rst_cd");
+        HashMap<String, Object> userInfoMap = userService.login(userDto);
+        String rst_cd = (String)userInfoMap.get("rst_cd");
 
         JSONObject obj = new JSONObject();
 
@@ -50,6 +50,7 @@ public class UserCtrl {
         obj.put("nickNm", userInfoMap.get("nickNm"));
         obj.put("allergieCd", userInfoMap.get("allergieCd"));
         obj.put("allergieNm", userInfoMap.get("allergieNm"));
+        obj.put("allergieList", userInfoMap.get("allergieList"));
         obj.put("diseaseCd", userInfoMap.get("diseaseCd"));
         obj.put("diseaseNm", userInfoMap.get("diseaseNm"));
         return obj.toString();
@@ -121,6 +122,7 @@ public class UserCtrl {
                 newPwd (String, 새로 쓸 비밀번호),
                 newPwdc(String, 새로 쓸 비밀번호 확인)
         Output : "rst_cd" > 200: 성공
+                            -2 : 비밀번호 질문 답변이 일치하지 않음
                  "rst_desc" > 'rst_cd' 설명 문구, 활용은 자율적으로 선택
          */
     }
