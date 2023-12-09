@@ -131,6 +131,22 @@ public class UserSvc {
         }
     }
 
+    private Boolean isCorrectPwdqa(String email, String pwdq, String pwda){
+        UserDto userDto = new UserDto();
+
+        userDto.setEmail(email);
+        userDto.setPwdq(pwdq);
+        userDto.setPwda(pwda);
+
+        List<UserDto> userList = userDao.getList(userDto);
+
+        if(userList.size() != 1){
+            return false;
+        } else {
+            return true;
+        }
+    }
+
 
 //    회원가입 시도
     public Integer join(JoinDto joinDto){
@@ -248,6 +264,7 @@ public class UserSvc {
 
 
 //    회원탈퇴
+    @Transactional
     public HashMap<String, String> resign(Integer idx){
         HashMap<String, String> resultMap = new HashMap<>();
         UserAllergieDto theUserAlle = new UserAllergieDto();
@@ -263,6 +280,7 @@ public class UserSvc {
             Integer i = a.getIdx();
             userAllergieDao.del(i);
         }
+
         for (UserDiseaseDto b : diseList){
             Integer i = b.getIdx();
             userDiseaseDao.del(i);
@@ -276,6 +294,7 @@ public class UserSvc {
         return resultMap;
     }
 
+    /*
     public HashMap<String, String> pwdChange(PwdChangeDto pwdChangeDto){
         HashMap<String, String> resultMap = new HashMap<>();
 
@@ -295,6 +314,51 @@ public class UserSvc {
         resultMap.put("rst_desc", "성공적으로 비밀번호를 변경했습니다.");
         return resultMap;
 
+    }
+     */
+
+
+//    비밀번호 질문 + 답변 + 이메일 검증으로 변경 허가받기
+    public HashMap<String, String> isPwdchangeAllowed(UserDto userDto){
+        HashMap<String, String> resultMap = new HashMap<>();
+
+        String userEmail = userDto.getEmail();
+        String userPwdq = userDto.getPwdq();
+        String userPwda = userDto.getPwda();
+
+        if(!isCorrectPwdqa(userEmail, userPwdq, userPwda)){
+            resultMap.put("rst_cd", "-1");
+            resultMap.put("rst_desc", "계정정보와 비밀번호 질답이 일치하지 않습니다. 입력한 정보를 확인해주십시오.");
+            return resultMap;
+        } else {
+            resultMap.put("rst_cd", "200");
+            resultMap.put("rst_desc", "비밀번호 변경 허가되었음");
+            return resultMap;
+        }
+    }
+
+//    새 비밀번호로 변경하기
+    public HashMap<String, String> replacePassword(UserDto userDto){
+        HashMap<String, String> resultMap = new HashMap<>();
+        UserDto newPwdUser = new UserDto();
+        newPwdUser.setEmail(userDto.getEmail());
+
+        List<UserDto> userCheck = userDao.getList(newPwdUser);
+        if(userCheck.size() != 1){
+            resultMap.put("rst_cd", "-3");
+            resultMap.put("rst_desc", "작업 처리 중 오류가 발생했습니다.");
+            return resultMap;
+        }
+
+        Integer userIndex = userCheck.get(0).getIdx();
+
+        newPwdUser.setIdx(userIndex);
+        newPwdUser.setPwd(userDto.getPwd());
+        userDao.mod(newPwdUser);
+
+        resultMap.put("rst_cd", "200");
+        resultMap.put("rst_desc", "비밀번호 변경 완료.");
+        return resultMap;
     }
 
 //    알레르기 변경

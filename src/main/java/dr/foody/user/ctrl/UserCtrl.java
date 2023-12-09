@@ -60,6 +60,12 @@ public class UserCtrl {
         // Input : email(String), pwd(String)
         // output : rst_cd : -1 : 아이디 없음,   -2 : pw 틀림, 200 : 로그인 성공
         //          user_idx : 로그인된 user의 키값. 로그인이 실패라면 쓰레기 값이 input되어있음.
+//                  nickNm : 로그인된 user의 닉네임
+//                  allergieCd : user의 알레르기 코드 나열 (A#B#C 형식)
+//                  allergieNm : user의 알레르기 이름 나열 (A#B#C 형식)
+//                  allergieList : user의 알레르기 목록 (List 형식)
+//                  diseaseCd : user의 만성질환 코드 나열 (A#B#C 형식)
+//                  diseaseNm : user의 만성질환 이름 나열 (A#B#C 형식)
 
     }
 
@@ -104,9 +110,9 @@ public class UserCtrl {
          */
     }
 
-    @PutMapping("/pwdchange")
-    public Object pwdChange(@ModelAttribute PwdChangeDto pwdChangeDto){
-        HashMap<String, String> response = userService.pwdChange(pwdChangeDto);
+    @PostMapping("/checkpwdqa")
+    public Object pwdChange(@ModelAttribute UserDto userDto){
+        HashMap<String, String> response = userService.isPwdchangeAllowed(userDto);
 
         JSONObject obj = new JSONObject();
         obj.put("rst_cd", response.get("rst_cd"));
@@ -115,16 +121,33 @@ public class UserCtrl {
         return obj.toString();
 
         /*
-        API : /user/pwdchange
+        API : /user/checkpwdqa
+        호출방식 : POST (확인만 하는 서비스지만 민감정보가 있어서 GET을 쓰지 않았음)
+        Input : email (String, 유저user 테이블의 email), pwdq, pwda (유저user 테이블의 pwdq, pwda :: 비밀번호 질문답변)
+        Output : "rst_cd" > -1: 계정정보 불일치
+                            200 : 성공
+                 "rst_desc" > 결과 설명
+        */
+    }
+
+    @PutMapping("/replacepwd")
+    public Object pwdReplace(@ModelAttribute UserDto userDto){
+        HashMap<String, String> response = userService.replacePassword(userDto);
+
+        JSONObject obj = new JSONObject();
+        obj.put("rst_cd", response.get("rst_cd"));
+        obj.put("rst_desc", response.get("rst_desc"));
+
+        return obj.toString();
+
+        /*
+        API : /user/replacepwd
         호출방식 : PUT
-        Input : idx (Integer, user 테이블의 idx),
-                pwda (String, 비밀번호 질답의 답변),
-                newPwd (String, 새로 쓸 비밀번호),
-                newPwdc(String, 새로 쓸 비밀번호 확인)
-        Output : "rst_cd" > 200: 성공
-                            -2 : 비밀번호 질문 답변이 일치하지 않음
-                 "rst_desc" > 'rst_cd' 설명 문구, 활용은 자율적으로 선택
-         */
+        Input : email (String, 유저user 테이블의 email), pwd (유저user 테이블의 비밀번호pwd)
+        Output : "rst_cd" > -3: 실행 중 오류 발생 (email 검색 결과 없음으로 추정, 제대로 보냈는지 확인)
+                            200 : 성공
+                 "rst_desc" > 결과 설명
+        */
     }
 
     @PostMapping("/allergiechange")
