@@ -158,7 +158,7 @@ public class UserSvc {
             if(allowJoin(joinDto))
                 return 1;
             else
-                return -1;
+                return -2;
         }
 
     }

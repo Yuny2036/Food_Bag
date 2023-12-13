@@ -32,11 +32,4 @@ public class FoodCtrl {
     public Object modInsDev( @ModelAttribute FoodDto foodDto) {
         return foodService.modify(foodDto);
     }
-
-    /*
-    @GetMapping("/shownutritionstats")
-    public void showNutritionStats(@ModelAttribute FoodDto foodDto){
-//        FoodNutritionDto nutriDto =
-    }
-    */
 }

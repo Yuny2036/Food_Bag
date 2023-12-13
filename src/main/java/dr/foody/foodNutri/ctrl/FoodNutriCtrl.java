@@ -2,8 +2,11 @@ package dr.foody.foodNutri.ctrl;
 
 import dr.foody.foodNutri.dto.FoodNutriDto;
 import dr.foody.foodNutri.svc.FoodNutriSvc;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
 
 @RestController
 @RequestMapping("/foodnutri")
@@ -29,5 +32,22 @@ public class FoodNutriCtrl {
     @PutMapping("/update")
     public Object modInsDev( @ModelAttribute FoodNutriDto foodNutriDto) {
         return foodNutriService.modify(foodNutriDto);
+    }
+
+    @GetMapping("/getNutrition")
+    public Object getNutrition(@ModelAttribute FoodNutriDto foodNutriDto){
+        HashMap<String, Object> response = foodNutriService.getNutritionMap(foodNutriDto);
+        JSONObject obj = new JSONObject();
+
+        obj.put("rst_cd", response.get("rst_cd"));
+        obj.put("rst_desc", response.get("rst_desc"));
+        obj.put("kcal", response.get("kcal"));
+        obj.put("carbo", response.get("carbo"));
+        obj.put("protein", response.get("protein"));
+        obj.put("fat", response.get("fat"));
+        obj.put("salt", response.get("salt"));
+        obj.put("chole", response.get("chole"));
+
+        return obj.toString();
     }
 }

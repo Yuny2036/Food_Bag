@@ -29,14 +29,4 @@ public class FoodSvc {
     public Object delete(Integer idx){
         return foodDao.del(idx);
     }
-
-    /*
-    public void showNutritionStats(Integer idx){
-        HashMap<String, String> resultMap = new HashMap<>();
-        FoodNutritionDto nutrition = new FoodNutritionDto();
-        nutrition.setIdx(idx);
-//        List<FoodNutritionDto> nutriList = foodDao
-    }
-
-    */
 }

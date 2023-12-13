@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dr.foody.calenderMeal.dao.CalenderMealDao">
+
+    <select id="getList" parameterType="dr.foody.calenderMeal.dto.CalenderMealDto"
+            resultType="dr.foody.calenderMeal.dto.CalenderMealDto">
+        SELECT
+        idx,
+        user_idx,
+        occasion,
+        date,
+        food_idx
+        FROM calender_meal
+        <where>
+            <if test="idx !=null">idx = #{idx}</if>
+            <if test="userIdx !=null">AND user_idx = #{userIdx}</if>
+            <if test="occasion !=null">AND occasion = #{occasion}</if>
+            <if test="date !=null">AND date = #{date}</if>
+            <if test="foodIdx !=null">AND food_idx = #{foodIdx}</if>
+        </where>
+    </select>
+    <update id="mod" parameterType="dr.foody.calenderMeal.dto.CalenderMealDto">
+        UPDATE calender_meal
+        <set>
+            <if test="userIdx !=null"> user_idx = #{userIdx}</if>
+            <if test="occasion !=null"> occasion = #{occasion}</if>
+            <if test="date !=null">, date = #{date}</if>
+            <if test="foodIdx !=null">, food_idx = #{foodIdx}</if>
+        </set>
+        WHERE IDX = #{idx}
+    </update>
+    <insert id="reg" parameterType="dr.foody.calenderMeal.dto.CalenderMealDto"
+            useGeneratedKeys="true" keyProperty="idx">
+        INSERT INTO calender_meal
+        (
+        user_idx,
+        occasion,
+        date,
+        food_idx
+        ) VALUES (
+        #{userIdx},
+        #{occasion},
+        #{date},
+        #{foodIdx}
+        )
+    </insert>
+    <delete id="del" parameterType="java.lang.Integer">
+        DELETE FROM calender_meal WHERE IDX = #{idx}
+    </delete>
+</mapper>

@@ -7,7 +7,7 @@ import java.util.List;
 
 @Mapper
 public interface ListillnessDao {
-    List<ListillnessDao> getList(ListillnessDto listillnessDto);
+    List<ListillnessDto> getList(ListillnessDto listillnessDto);
     Integer mod(ListillnessDto listillnessDto);
     Integer reg(ListillnessDto listillnessDto);
     Integer del(Integer idx);

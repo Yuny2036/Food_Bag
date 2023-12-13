@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dr.foody.foodDisease.dao.FoodDiseaseDao">
+
+    <select id="getList" parameterType="dr.foody.foodDisease.dto.FoodDiseaseDto"
+            resultType="dr.foody.foodDisease.dto.FoodDiseaseDto">
+        SELECT
+        idx,
+        food_idx,
+        code
+        FROM food_disease
+        <where>
+            <if test="idx !=null">idx = #{idx}</if>
+            <if test="foodIdx !=null">AND food_idx = #{foodIdx}</if>
+            <if test="code !=null">AND code = #{code}</if>
+        </where>
+    </select>
+    <update id="mod" parameterType="dr.foody.foodDisease.dto.FoodDiseaseDto">
+        UPDATE food_disease
+        <set>
+            <if test="foodIdx !=null"> food_idx = #{foodIdx}</if>
+            <if test="code !=null">, code = #{code}</if>
+        </set>
+        WHERE IDX = #{idx}
+    </update>
+    <insert id="reg" parameterType="dr.foody.foodDisease.dto.FoodDiseaseDto"
+            useGeneratedKeys="true" keyProperty="idx">
+        INSERT INTO food_disease
+        (
+        food_idx,
+        code
+        ) VALUES (
+        #{foodIdx},
+        #{code}
+        )
+    </insert>
+    <delete id="del" parameterType="java.lang.Integer">
+        DELETE FROM food_disease WHERE IDX = #{idx}
+    </delete>
+</mapper>

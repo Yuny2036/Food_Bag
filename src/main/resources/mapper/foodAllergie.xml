@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dr.foody.foodAllergie.dao.FoodAllergieDao">
+
+    <select id="getList" parameterType="dr.foody.foodAllergie.dto.FoodAllergieDto"
+            resultType="dr.foody.foodAllergie.dto.FoodAllergieDto">
+        SELECT
+        idx,
+        food_idx,
+        code
+        FROM food_allergie
+        <where>
+            <if test="idx !=null">idx = #{idx}</if>
+            <if test="foodIdx !=null">AND food_idx = #{foodIdx}</if>
+            <if test="code !=null">AND code = #{code}</if>
+        </where>
+    </select>
+    <update id="mod" parameterType="dr.foody.foodAllergie.dto.FoodAllergieDto">
+        UPDATE food_allergie
+        <set>
+            <if test="foodIdx !=null"> food_idx = #{foodIdx}</if>
+            <if test="code !=null">, code = #{code}</if>
+        </set>
+        WHERE IDX = #{idx}
+    </update>
+    <insert id="reg" parameterType="dr.foody.foodAllergie.dto.FoodAllergieDto"
+            useGeneratedKeys="true" keyProperty="idx">
+        INSERT INTO food_allergie
+        (
+        food_idx,
+        code
+        ) VALUES (
+        #{foodIdx},
+        #{code}
+        )
+    </insert>
+    <delete id="del" parameterType="java.lang.Integer">
+        DELETE FROM food_allergie WHERE IDX = #{idx}
+    </delete>
+</mapper>
