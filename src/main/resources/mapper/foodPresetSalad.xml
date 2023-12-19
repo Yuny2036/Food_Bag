@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dr.foody.foodPresetSalad.dao.FoodPresetSaladDao">
+
+    <select id="getList" parameterType="dr.foody.foodPresetSalad.dto.FoodPresetSaladDto"
+            resultType="dr.foody.foodPresetSalad.dto.FoodPresetSaladDto">
+        SELECT
+        idx,
+        food_one,
+        food_two,
+        food_thr
+        FROM food_PresetSalad
+        <where>
+            <if test="idx !=null">idx = #{idx}</if>
+            <if test="foodOne !=null">AND food_one = #{foodOne}</if>
+            <if test="foodTwo !=null">AND food_two = #{foodTwo}</if>
+            <if test="foodThr !=null">AND food_thr = #{foodThr}</if>
+        </where>
+    </select>
+    <update id="mod" parameterType="dr.foody.foodPresetSalad.dto.FoodPresetSaladDto">
+        UPDATE food_PresetSalad
+        <set>
+            <if test="foodOne !=null"> food_one = #{foodOne}</if>
+            <if test="foodTwo !=null">, food_two = #{foodTwo}</if>
+            <if test="foodThr !=null">, food_thr = #{foodThr}</if>
+        </set>
+        WHERE IDX = #{idx}
+    </update>
+    <insert id="reg" parameterType="dr.foody.foodPresetSalad.dto.FoodPresetSaladDto"
+            useGeneratedKeys="true" keyProperty="idx">
+        INSERT INTO food_PresetSalad
+        (
+        food_one,
+        food_two,
+        food_thr
+        ) VALUES (
+        #{foodOne},
+        #{foodTwo},
+        #{foodThr}
+        )
+    </insert>
+    <delete id="del" parameterType="java.lang.Integer">
+        DELETE FROM food_PresetSalad WHERE IDX = #{idx}
+    </delete>
+</mapper>
