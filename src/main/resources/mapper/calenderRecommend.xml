@@ -44,6 +44,18 @@
         #{foodIdx}
         )
     </insert>
+    <insert id="regList" parameterType="java.util.List">
+        INSERT calender_recommended
+        (
+        user_idx,
+        occasion,
+        date,
+        food_idx
+        ) VALUES
+        <foreach collection="list" item="item" separator=",">
+            (#{item.userIdx}, #{item.occasion}, #{item.date}, #{item.foodIdx})
+        </foreach>
+    </insert>
     <delete id="del" parameterType="java.lang.Integer">
         DELETE FROM calender_recommended WHERE IDX = #{idx}
     </delete>

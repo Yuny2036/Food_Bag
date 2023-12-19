@@ -65,7 +65,7 @@ public class UserSvc {
         }
 
         HashMap<String, Object> allergiInfoMap = getAllergieInfo(nowUser.getIdx());
-        HashMap<String, String> diseaseInfoMap = getDiseaseInfo(nowUser.getIdx());
+        HashMap<String, Object> diseaseInfoMap = getDiseaseInfo(nowUser.getIdx());
 
         resultMap.put("rst_cd", "200");
         resultMap.put("userIdx", nowUser.getIdx().toString());
@@ -75,6 +75,7 @@ public class UserSvc {
         resultMap.put("allergieList", allergiInfoMap.get("allergieList"));
         resultMap.put("diseaseCd", diseaseInfoMap.get("diseaseCd"));
         resultMap.put("diseaseNm", diseaseInfoMap.get("diseaseNm"));
+        resultMap.put("diseaseList", allergiInfoMap.get("diseaseList"));
         return resultMap;
     }
 
@@ -238,7 +239,7 @@ public class UserSvc {
     }
 
 //    회원 만성질환 정보 가져오기
-    private HashMap<String, String> getDiseaseInfo(Integer userIdx)
+    private HashMap<String, Object> getDiseaseInfo(Integer userIdx)
     {
         UserDiseaseDto aDto = new UserDiseaseDto();
         aDto.setUserIdx(userIdx);
@@ -254,9 +255,11 @@ public class UserSvc {
             aNm.append("#");
             aNm.append(u.getName());
         }
-        HashMap<String, String> resultMap = new HashMap<String, String>();
+        HashMap<String, Object> resultMap = new HashMap<String, Object>();
         resultMap.put("diseaseCd", aCd.substring(1)) ;
         resultMap.put("diseaseNm", aNm.substring(1)) ;
+        resultMap.put("diseaseList", userDiseaseList) ;
+
 
         return resultMap;
 
@@ -458,10 +461,10 @@ public class UserSvc {
     public HashMap<String, String> showMedicalstats(Integer idx){
         HashMap<String, String> totalInfo = new HashMap<>();
         HashMap<String, Object> alleInfo = getAllergieInfo(idx);
-        HashMap<String, String> diseInfo = getDiseaseInfo(idx);
+        HashMap<String, Object> diseInfo = getDiseaseInfo(idx);
 
         totalInfo.put("allergie", (String)alleInfo.get("allergieNm"));
-        totalInfo.put("disease", diseInfo.get("diseaseNm"));
+        totalInfo.put("disease", (String)diseInfo.get("diseaseNm"));
         totalInfo.put("rst_cd", "200");
 
         return totalInfo;

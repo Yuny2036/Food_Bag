@@ -5,17 +5,30 @@
     <select id="getList" parameterType="dr.foody.food.dto.FoodDto"
             resultType="dr.foody.food.dto.FoodDto">
         SELECT
-        idx,
-        name,
-        weight,
-        season
-        FROM food
+        a.idx,
+        a.name,
+        a.weight,
+        a.season,
+        b.type
+        FROM ( select * from food where idx in (SELECT food_idx FROM food_type WHERE TYPE=#{inType})) as a
+        LEFT OUTER JOIN food_type as b
+        ON a.idx = b.food_idx
+        LEFT OUTER JOIN food_allergie AS c
+        ON c.food_idx = a.idx
+        LeFT OUTER JOIN food_ingredient AS d
+        ON d.food_idx = a.idx
         <where>
-            <if test="idx !=null">idx = #{idx}</if>
-            <if test="name !=null">AND name = #{name}</if>
-            <if test="weight !=null">AND weight = #{weight}</if>
-            <if test="season !=null">AND season = #{season}</if>
+            <if test="idx !=null">a.idx = #{idx}</if>
+            <if test="name !=null">AND a.name = #{name}</if>
+            <if test="weight !=null">AND a.weight = #{weight}</if>
+            <if test="season !=null">AND a.season = #{season}</if>
+
+            <if test="notInType !=null">AND b.type not in (${notInType})</if>
+            <if test="exceptAllergie !=null">AND (c.code not in (${exceptAllergie})  OR c.code IS NULL )</if>
+            <if test="notInIngre !=null">AND d.ingre not in (${notInIngre})</if>
         </where>
+        group by a.idx
+        ORDER BY RAND() * (SELECT COUNT(*) FROM food) LIMIT 1
     </select>
     <update id="mod" parameterType="dr.foody.food.dto.FoodDto">
         UPDATE food

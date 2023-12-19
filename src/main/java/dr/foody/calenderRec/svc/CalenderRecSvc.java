@@ -9,6 +9,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.List;
 
@@ -34,13 +36,37 @@ public class CalenderRecSvc {
         return calenderRecDao.del(idx);
     }
 
-    public HashMap<String, String> getRecommendedList(UserDto userDto){
+    public HashMap<String, Object> getRecommendedList(UserDto userDto){
 //        Return 할 HashMap 생성
-        HashMap<String, String> resultMap = new HashMap();
+        HashMap<String, Object> resultMap = new HashMap();
+
+//        현재 날짜 설정하기
+        LocalTime time = LocalTime.now();
+        LocalDate currentDate = LocalDate.now();
+        if (isBetween(time, LocalTime.of(22, 0), LocalTime.of(23, 59, 59))) {
+            // 22시부터 23:59분까지는 다음 날로 간주
+            currentDate = currentDate.plusDays(1);
+        }
 
 //        캘린더-추천식단목록 조회할 회원정보 설정
         CalenderRecDto calender = new CalenderRecDto();
-        calender.setUserIdx(userDto.getIdx());
+        calender.setUserIdx(userDto.getIdx()); // 회원 키 값
+        calender.setDate(currentDate.toString());
+
+//        아침 점심 저녁 시간대에 맞춰서 검색하기
+        if (isBetween(time, LocalTime.of(22, 0), LocalTime.of(23, 59, 59))
+                || isBetween(time, LocalTime.of(0, 0), LocalTime.of(9, 59, 59))) {
+            calender.setOccasion("아침");
+        } else if (isBetween(time, LocalTime.of(10, 0), LocalTime.of(15, 59, 59))) {
+            calender.setOccasion("점심");
+        } else if (isBetween(time, LocalTime.of(16, 0), LocalTime.of(21, 59, 59))) {
+            calender.setOccasion("저녁");
+        } else {
+            resultMap.put("rst_cd", "-5");
+            resultMap.put("rst_desc", "기기 오류");
+            return resultMap;
+        }
+
 
 //        캘린더-추천식단목록 조회
         List<CalenderRecDto> recList = calenderRecDao.getList(calender);
@@ -79,7 +105,12 @@ public class CalenderRecSvc {
 //        맨 앞의 #를 잘라내고 HashMap 으로 전달하기
         resultMap.put("rst_cd", "200");
         resultMap.put("foodName", recFoodNm.substring(1));
+        resultMap.put("foodList", recList);
 
         return resultMap;
+    }
+
+    private boolean isBetween(LocalTime time, LocalTime start, LocalTime end){
+        return !time.isBefore(start) && !time.isAfter(end);
     }
 }

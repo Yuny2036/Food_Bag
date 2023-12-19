@@ -38,7 +38,7 @@ public class CalenderRecCtrl {
     @GetMapping("/recommended")
     public Object recommended(@ModelAttribute UserDto userDto){
 //        #으로 묶인 식단리스트 받아오기
-        HashMap<String, String> recommenedInfo = calenderRecService.getRecommendedList(userDto);
+        HashMap<String, Object> recommenedInfo = calenderRecService.getRecommendedList(userDto);
 
 //        JSON으로 API의 Call을 반환하기
         JSONObject obj = new JSONObject();
