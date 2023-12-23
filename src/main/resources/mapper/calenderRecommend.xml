@@ -59,4 +59,17 @@
     <delete id="del" parameterType="java.lang.Integer">
         DELETE FROM calender_recommended WHERE IDX = #{idx}
     </delete>
+    <select id="searchDateList" parameterType="dr.foody.calenderRec.dto.CalenderRecDto"
+            resultType="dr.foody.calenderRec.dto.NameOnlyRmdDto">
+        SELECT
+        f.name
+        FROM calender_recommended AS cr
+             LEFT OUTER JOIN food AS f
+             ON cr.food_idx = f.idx
+        <where>
+            <if test="userIdx != null">cr.user_idx = #{userIdx}</if>
+            <if test="date != null">AND cr.date = #{date}</if>
+            <if test="occasion != null">AND cr.occasion = #{occasion}</if>
+        </where>
+    </select>
 </mapper>

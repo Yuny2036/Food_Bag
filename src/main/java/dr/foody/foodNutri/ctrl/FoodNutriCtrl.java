@@ -49,5 +49,20 @@ public class FoodNutriCtrl {
         obj.put("chole", response.get("chole"));
 
         return obj.toString();
+
+        /*
+        API : /foodnutri/getNutrition
+        호출방식 : GET
+        Input : foodIdx(음식 키idx 값)
+        Output : "rst_cd" > 200: 성공
+                            -1 : 실패, 음식 키가 유효하지 않음 (없는 음식)
+                 "rst_desc" : 각 rst_cd에 따른 오류 설명
+                 "kcal" : 칼로리
+                 "carbo" : 탄수화물
+                 "protein" : 단백질
+                 "fat" : 지방
+                 "salt" : 염분
+                 "chole" : 콜레스테롤
+         */
     }
 }

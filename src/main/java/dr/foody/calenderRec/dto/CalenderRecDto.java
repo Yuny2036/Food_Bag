@@ -9,4 +9,5 @@ public class CalenderRecDto {
     private String occasion;
     private String date;
     private Integer foodIdx;
+    private String name;
 }

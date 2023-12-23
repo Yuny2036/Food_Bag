@@ -2,6 +2,7 @@ package dr.foody.calenderRec.svc;
 
 import dr.foody.calenderRec.dao.CalenderRecDao;
 import dr.foody.calenderRec.dto.CalenderRecDto;
+import dr.foody.calenderRec.dto.NameOnlyRmdDto;
 import dr.foody.food.dao.FoodDao;
 import dr.foody.food.dto.FoodDto;
 import dr.foody.user.dto.UserDto;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -112,5 +114,69 @@ public class CalenderRecSvc {
 
     private boolean isBetween(LocalTime time, LocalTime start, LocalTime end){
         return !time.isBefore(start) && !time.isAfter(end);
+    }
+
+    /*
+
+    public void searchRmdMeal(CalenderRecDto calenderRecDto){
+        List<CalenderRecDto> searchResult = calenderRecDao.searchDateList(dateSearchDto);
+        LocalDate dateStart = LocalDate.parse(dateSearchDto.getDateStart());
+        LocalDate dateEnd = LocalDate.parse(dateSearchDto.getDateEnd());
+
+        if (dateStart.compareTo(dateEnd) > 0){
+//            시작날짜가 종료날짜보다 이후이므로 오류코드 반환할 것
+            return;
+        }
+
+        HashMap<String, Object> resultMap = new HashMap<>();
+        HashMap<String, Object> resultMapInner = new HashMap<>();
+
+        do {
+
+            for (Integer i = 0; i < searchResult.size(); i++){
+
+            }
+
+            dateStart = dateStart.plusDays(1);
+        } while(dateStart != dateEnd);
+
+    }
+     */
+
+    public HashMap<String, Object> searchRmdMeal(CalenderRecDto calenderRecDto) {
+//        return calenderRecDao.searchDateList(calenderRecDto);
+
+        HashMap<String, Object> resultMap = new HashMap<>();
+        List<NameOnlyRmdDto> mealList = calenderRecDao.searchDateList(calenderRecDto);
+
+        if (mealList.isEmpty()){
+            resultMap.put("rst_cd", "-1");
+            resultMap.put("rst_desc", "검색결과가 없습니다. 유저, 날짜형식(yyyy-MM-dd)과 시간대('아침', '점심', '저녁')이 올바른지 확인해주세요.");
+            return resultMap;
+        }
+
+//        ArrayList로 넘기는 방법
+        ArrayList<String> resultArray = new ArrayList<>();
+
+        for (NameOnlyRmdDto names : mealList){
+            resultArray.add(names.getName());
+        }
+
+        resultMap.put("rst_cd", "200");
+        resultMap.put("rst_desc", "전달 성공");
+        resultMap.put("foodList", resultArray);
+
+
+        return resultMap;
+
+        /*
+//        배열(Array)로 넘기는 방법
+
+        String[] resultArray = new String[mealList.size()];
+
+        for (Integer i = 0; i < mealList.size(); i++){
+            resultArray[i] = mealList.get(i).getName();
+        }
+         */
     }
 }
