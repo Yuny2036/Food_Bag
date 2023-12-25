@@ -44,7 +44,8 @@ public class CalenderRecCtrl {
         JSONObject obj = new JSONObject();
         obj.put("rst_cd", recommenedInfo.get("rst_cd"));
         obj.put("rst_desc", recommenedInfo.get("rst_desc"));
-        obj.put("foodName", recommenedInfo.get("foodName"));
+//        obj.put("foodName", recommenedInfo.get("foodName"));
+        obj.put("foodList", recommenedInfo.get("foodList"));
 
         return obj.toString();
 
@@ -53,7 +54,7 @@ public class CalenderRecCtrl {
         호출방식 : GET
         Input : userIdx(유저 키idx 값)
         Output : "rst_cd" > 200: 성공
-                            -1 : 실패, 조회된 건수가 없음 = 검색결과로 나오는 식사가 없음
+                            -1 : 실패, 조회된 건수가 없음 > 새 추천식단 생성
                             -5 : 실패, 기기 오류(시각 측정 관련)
                  "rst_desc" : 각 rst_cd에 따른 오류 설명
                  "foodName" : # 단위로 묶인 식단

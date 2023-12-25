@@ -5,6 +5,7 @@ import dr.foody.calenderRec.dto.CalenderRecDto;
 import dr.foody.calenderRec.dto.NameOnlyRmdDto;
 import dr.foody.food.dao.FoodDao;
 import dr.foody.food.dto.FoodDto;
+import dr.foody.foodBuild.svc.MealBuildSvc;
 import dr.foody.user.dto.UserDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,9 @@ public class CalenderRecSvc {
 
     @Autowired
     FoodDao foodDao;
+
+    @Autowired
+    MealBuildSvc mealBuildSvc;
 
     public Object getList(CalenderRecDto calenderRecDto){
         return calenderRecDao.getList(calenderRecDto);
@@ -76,8 +80,9 @@ public class CalenderRecSvc {
 
 //        조회된 건수가 0일 경우 오류 확인하라고 이야기 할 것
         if (recList.isEmpty()){
+            mealBuildSvc.setFood(userDto.getIdx());
             resultMap.put("rst_cd", "-1");
-            resultMap.put("rst_desc", "해당 계정으로 조회된 추천식단이 없습니다. 문의해주세요.");
+            resultMap.put("rst_desc", "조회된 추천 식단이 없습니다. 생성된 새 식단을 확인하기 위해 새로고침 해주세요.");
             return resultMap;
         }
 
@@ -93,21 +98,28 @@ public class CalenderRecSvc {
 //            recFoodNm.append(f);
 //        }
 
-        FoodDto foodLoad = new FoodDto();
+//        FoodDto foodLoad = new FoodDto();
+//
+//        for (CalenderRecDto c : recList){
+//            foodLoad.setIdx(c.getFoodIdx());
+//            List<FoodDto> food = foodDao.getList(foodLoad);
+//            recFoodNm.append("#");
+//            for (FoodDto d : food){
+//                recFoodNm.append(d.getName());
+//            }
+//        }
+//        resultMap.put("foodName", recFoodNm.substring(1));
 
-        for (CalenderRecDto c : recList){
-            foodLoad.setIdx(c.getFoodIdx());
-            List<FoodDto> food = foodDao.getList(foodLoad);
-            recFoodNm.append("#");
-            for (FoodDto d : food){
-                recFoodNm.append(d.getName());
-            }
+        List<NameOnlyRmdDto> foodNow = calenderRecDao.searchDateList(calender);
+        ArrayList<String> resultArray = new ArrayList<>();
+
+        for (NameOnlyRmdDto names : foodNow){
+            resultArray.add(names.getName());
         }
 
 //        맨 앞의 #를 잘라내고 HashMap 으로 전달하기
         resultMap.put("rst_cd", "200");
-        resultMap.put("foodName", recFoodNm.substring(1));
-        resultMap.put("foodList", recList);
+        resultMap.put("foodList", resultArray);
 
         return resultMap;
     }
