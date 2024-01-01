@@ -60,9 +60,10 @@
         DELETE FROM calender_recommended WHERE IDX = #{idx}
     </delete>
     <select id="searchDateList" parameterType="dr.foody.calenderRec.dto.CalenderRecDto"
-            resultType="dr.foody.calenderRec.dto.NameOnlyRmdDto">
+            resultType="dr.foody.calenderRec.dto.NameIdxRmdDto">
         SELECT
-        f.name
+        f.name,
+        f.idx AS food_idx
         FROM calender_recommended AS cr
              LEFT OUTER JOIN food AS f
              ON cr.food_idx = f.idx

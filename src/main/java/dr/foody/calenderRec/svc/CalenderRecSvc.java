@@ -2,6 +2,7 @@ package dr.foody.calenderRec.svc;
 
 import dr.foody.calenderRec.dao.CalenderRecDao;
 import dr.foody.calenderRec.dto.CalenderRecDto;
+import dr.foody.calenderRec.dto.NameIdxRmdDto;
 import dr.foody.calenderRec.dto.NameOnlyRmdDto;
 import dr.foody.food.dao.FoodDao;
 import dr.foody.food.dto.FoodDto;
@@ -110,10 +111,10 @@ public class CalenderRecSvc {
 //        }
 //        resultMap.put("foodName", recFoodNm.substring(1));
 
-        List<NameOnlyRmdDto> foodNow = calenderRecDao.searchDateList(calender);
+        List<NameIdxRmdDto> foodNow = calenderRecDao.searchDateList(calender);
         ArrayList<String> resultArray = new ArrayList<>();
 
-        for (NameOnlyRmdDto names : foodNow){
+        for (NameIdxRmdDto names : foodNow){
             resultArray.add(names.getName());
         }
 
@@ -155,11 +156,13 @@ public class CalenderRecSvc {
     }
      */
 
+
+//    이 코드 조금 기워맞춘 감이 있어서 아쉽다. 수정할 때 주의하자. Mapper와 DTO, DAO 모두 신경써야 한다.
     public HashMap<String, Object> searchRmdMeal(CalenderRecDto calenderRecDto) {
 //        return calenderRecDao.searchDateList(calenderRecDto);
 
         HashMap<String, Object> resultMap = new HashMap<>();
-        List<NameOnlyRmdDto> mealList = calenderRecDao.searchDateList(calenderRecDto);
+        List<NameIdxRmdDto> mealList = calenderRecDao.searchDateList(calenderRecDto);
 
         if (mealList.isEmpty()){
             resultMap.put("rst_cd", "-1");
@@ -168,11 +171,12 @@ public class CalenderRecSvc {
         }
 
 //        ArrayList로 넘기는 방법
-        ArrayList<String> resultArray = new ArrayList<>();
+        ArrayList<Object> resultArray = new ArrayList<>();
 
-        for (NameOnlyRmdDto names : mealList){
-            resultArray.add(names.getName());
-        }
+//        for (NameOnlyRmdDto names : mealList){
+//            resultArray.add(names);
+//        }
+        resultArray.addAll(mealList);
 
         resultMap.put("rst_cd", "200");
         resultMap.put("rst_desc", "전달 성공");

@@ -8,5 +8,5 @@ public class CalenderMealDto {
     private Integer userIdx;
     private String occasion;
     private String date;
-    private Integer foodIdx;
+    private String foodRecord;
 }

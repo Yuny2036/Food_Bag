@@ -9,14 +9,14 @@
         user_idx,
         occasion,
         date,
-        food_idx
+        food_record
         FROM calender_meal
         <where>
             <if test="idx !=null">idx = #{idx}</if>
             <if test="userIdx !=null">AND user_idx = #{userIdx}</if>
             <if test="occasion !=null">AND occasion = #{occasion}</if>
             <if test="date !=null">AND date = #{date}</if>
-            <if test="foodIdx !=null">AND food_idx = #{foodIdx}</if>
+            <if test="foodRecord !=null">AND food_record = #{foodRecord}</if>
         </where>
     </select>
     <update id="mod" parameterType="dr.foody.calenderMeal.dto.CalenderMealDto">
@@ -25,7 +25,7 @@
             <if test="userIdx !=null"> user_idx = #{userIdx}</if>
             <if test="occasion !=null"> occasion = #{occasion}</if>
             <if test="date !=null">, date = #{date}</if>
-            <if test="foodIdx !=null">, food_idx = #{foodIdx}</if>
+            <if test="foodRecord !=null">, food_record = #{foodRecord}</if>
         </set>
         WHERE IDX = #{idx}
     </update>
@@ -36,15 +36,32 @@
         user_idx,
         occasion,
         date,
-        food_idx
+        food_record
         ) VALUES (
         #{userIdx},
         #{occasion},
         #{date},
-        #{foodIdx}
+        #{foodRecord}
         )
     </insert>
     <delete id="del" parameterType="java.lang.Integer">
         DELETE FROM calender_meal WHERE IDX = #{idx}
     </delete>
+
+    <delete id="deleteRecordedMeals" parameterType="dr.foody.calenderMeal.dto.CalenderMealDto">
+        DELETE FROM calender_meal WHERE user_idx = #{userIdx} AND date = #{date} AND occasion = #{occasion}
+    </delete>
+
+    <insert id="addRecordedMeals" parameterType="java.util.List">
+        INSERT calender_meal
+        (
+        user_idx,
+        occasion,
+        date,
+        food_record
+        ) VALUES
+        <foreach collection="list" item="item" separator=",">
+            (#{item.userIdx}, #{item.occasion}, #{item.date}, #{item.foodRecord})
+        </foreach>
+    </insert>
 </mapper>
