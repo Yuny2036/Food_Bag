@@ -41,7 +41,7 @@ public class CalenderMealCtrl {
 
     @PostMapping("/writeMealRecords")
     public Object writeMealRecords(@ModelAttribute CalenderRecordUserDto calenderRecordUserDto){
-        HashMap<String, Object> response = (HashMap<String, Object>) calenderMealService.rewriteRecords(calenderRecordUserDto);
+        HashMap<String, Object> response = calenderMealService.rewriteRecords(calenderRecordUserDto);
 
         JSONObject obj = new JSONObject();
         obj.put("rst_cd", response.get("rst_cd"));
@@ -58,5 +58,19 @@ public class CalenderMealCtrl {
                             -3 : foodRecord 로 들어온 음식이름이 결과적으로 모두 의미가 없는 공백이었을 경우 > 추가되지 않음
                  "rst_desc" : 각 rst_cd에 따른 오류 설명
          */
+    }
+
+    @GetMapping("/getMealNames")
+    public Object getMealNames(@ModelAttribute CalenderMealDto calenderMealDto){
+        HashMap<String, Object> response = calenderMealService.getMealNames(calenderMealDto);
+
+        JSONObject obj = new JSONObject();
+        obj.put("rst_cd", response.get("rst_cd"));
+        obj.put("rst_desc", response.get("rst_desc"));
+        if (response.get("mealNames") != null){
+            obj.put("mealNames", response.get("mealNames"));
+        }
+
+        return obj.toString();
     }
 }
