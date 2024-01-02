@@ -81,8 +81,6 @@ public class CalenderMealSvc {
             newRecordsArray.add(newRecord);
         }
 
-        System.out.println(newRecordsArray);
-
 //        유효성 검사 2에서 검사결과 모든 문자열이 의미없는 공백이였을 경우
         if (newRecordsArray.isEmpty()){
             resultMap.put("rst_cd", "-3");
