@@ -1,5 +1,7 @@
 package dr.foody.user.svc;
 
+import dr.foody.calenderMeal.dao.CalenderMealDao;
+import dr.foody.calenderRec.dao.CalenderRecDao;
 import dr.foody.user.dao.UserDao;
 import dr.foody.user.dto.JoinDto;
 import dr.foody.user.dto.PwdChangeDto;
@@ -28,6 +30,12 @@ public class UserSvc {
 
     @Autowired
     UserAllergieDao userAllergieDao;
+
+    @Autowired
+    CalenderRecDao calenderRecDao;
+
+    @Autowired
+    CalenderMealDao calenderMealDao;
 
     public Object getList(UserDto userDto){
         return userDao.getList(userDto);
@@ -292,6 +300,8 @@ public class UserSvc {
 //        계정정보만 지울거라면 이 위의 코드를 주석
 
         resultMap.put("rst_cd", "200");
+        calenderMealDao.delResign(idx);
+        calenderRecDao.delResign(idx);
         userDao.del(idx);
 
         return resultMap;

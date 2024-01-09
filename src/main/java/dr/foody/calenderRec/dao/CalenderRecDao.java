@@ -15,4 +15,6 @@ public interface CalenderRecDao {
     Integer regList(List<CalenderRecDto> calenderRecDto);
     List<NameIdxRmdDto> searchDateList(CalenderRecDto calenderRecDto);
     Integer del(Integer idx);
+
+    Integer delResign(Integer userIdx);
 }

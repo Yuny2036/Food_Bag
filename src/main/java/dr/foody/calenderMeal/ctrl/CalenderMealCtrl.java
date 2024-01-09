@@ -72,5 +72,40 @@ public class CalenderMealCtrl {
         }
 
         return obj.toString();
+
+        /*
+        API : /calenderMeal/getMealNames
+        호출방식 : GET
+        Input : userIdx(유저 키idx 값), date(날짜), occasion(시간대)
+        Output : "rst_cd" > 200: 성공
+                            -1 : 유저 키가 유효하지 않음
+                            -2 : 검색 결과 식사기록이 존재하지 않음
+                 "rst_desc" : 각 rst_cd에 따른 오류 설명
+                 "mealNames" : 저장된 식사기록, 배열(array, [])로 불러와짐.
+         */
     }
+
+
+    @DeleteMapping("/removeMealRecords")
+    public Object removeMealRecords(@ModelAttribute CalenderMealDto calenderMealDto){
+        Integer removedCounts = calenderMealService.removeMealRecords(calenderMealDto);
+
+        JSONObject obj = new JSONObject();
+
+        if (removedCounts > 0){
+            obj.put("rst_cd", "200");
+            obj.put("rst_desc", removedCounts+"개의 기록을 제거하였습니다.");
+        }
+
+        return obj.toString();
+
+        /*
+        API : /calenderMeal/removeMealRecords
+        호출방식 : DELETE
+        Input : userIdx(유저 키idx 값), date(날짜), occasion(시간대)
+        Output : "rst_cd" > 200: 성공
+                 "rst_desc" : 각 rst_cd에 따른 오류 설명
+         */
+    }
+
 }

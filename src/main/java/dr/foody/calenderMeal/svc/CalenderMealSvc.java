@@ -127,4 +127,7 @@ public class CalenderMealSvc {
         return resultMap;
     }
 
+    public Integer removeMealRecords(CalenderMealDto calenderMealDto){
+        return calenderMealDao.deleteRecordedMeals(calenderMealDto);
+    }
 }

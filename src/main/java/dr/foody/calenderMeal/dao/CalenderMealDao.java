@@ -12,6 +12,8 @@ public interface CalenderMealDao {
     Integer reg(CalenderMealDto calenderMealDto);
     Integer del(Integer idx);
 
+    Integer delResign(Integer userIdx);
+
     Integer deleteRecordedMeals(CalenderMealDto calenderMealDto);
     Integer addRecordedMeals(List<CalenderMealDto> calenderMealDtos);
 }
