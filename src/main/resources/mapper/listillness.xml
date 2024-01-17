@@ -8,7 +8,7 @@
         idx,
         code,
         name
-        FROM listillness
+        FROM list_illness
         <where>
             <if test="idx !=null">idx = #{idx}</if>
             <if test="code !=null">AND code = #{code}</if>
@@ -16,7 +16,7 @@
         </where>
     </select>
     <update id="mod" parameterType="dr.foody.listillness.dto.ListillnessDto">
-        UPDATE listillness
+        UPDATE list_illness
         <set>
             <if test="code !=null"> code = #{code}</if>
             <if test="name !=null">, name = #{name}</if>
@@ -25,7 +25,7 @@
     </update>
     <insert id="reg" parameterType="dr.foody.listillness.dto.ListillnessDto"
             useGeneratedKeys="true" keyProperty="idx">
-        INSERT listillness
+        INSERT list_illness
         (
         code,
         name,
@@ -35,6 +35,6 @@
         )
     </insert>
     <delete id="del" parameterType="java.lang.Integer">
-        DELETE FROM listillness WHERE IDX = #{idx}
+        DELETE FROM list_illness WHERE IDX = #{idx}
     </delete>
 </mapper>
